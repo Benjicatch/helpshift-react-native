@@ -1,7 +1,7 @@
 
 #import "RCTBridgeModule.h"
 #import "RCTEventEmitter.h"
-#import "HelpshiftSupport.h"
+@import Helpshift;
 
 @interface RNHelpshift : RCTEventEmitter <RCTBridgeModule, HelpshiftSupportDelegate>
 @end
