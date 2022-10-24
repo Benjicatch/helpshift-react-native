@@ -19,13 +19,8 @@ import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.views.view.ReactViewGroup;
 
-import com.helpshift.Core;
-import com.helpshift.HelpshiftUser;
-import com.helpshift.InstallConfig;
-import com.helpshift.delegate.AuthenticationFailureReason;
-import com.helpshift.exceptions.InstallException;
-import com.helpshift.support.ApiConfig;
-import com.helpshift.support.Support;
+import com.helpshift.Helpshift;
+import android.content.pm.ActivityInfo;
 
 import java.io.File;
 import java.util.HashMap;
@@ -62,13 +57,25 @@ public class RNHelpshiftView extends ViewGroupManager<ReactViewGroup> implements
     @ReactProp(name = "config")
     public void setConfig(final ReactViewGroup reactView, ReadableMap config) {
         Support.setDelegate(this);
-        Core.init(Support.getInstance());
-        InstallConfig installConfig = new InstallConfig.Builder().build();
+        Map<String, Object> config = new HashMap<>();
+        config.put("screenOrientation", ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        //...
+        // Install call
         try {
-            Core.install(mApplication,  config.getString("apiKey"),  config.getString("domain"),  config.getString("appId"), installConfig);
-        } catch (InstallException e) {
+            Helpshift.install(mApplication,
+                    config.getString("appId"),
+                    config.getString("domain"),
+                    config);
+        } catch (UnsupportedOSVersionException e) {
             Log.e("Helpshift", "invalid install credentials : ", e);
         }
+        // Core.init(Support.getInstance());
+        // InstallConfig installConfig = new InstallConfig.Builder().build();
+        // try {
+        //     Core.install(mApplication,  config.getString("apiKey"),  config.getString("domain"),  config.getString("appId"), installConfig);
+        // } catch (InstallException e) {
+        //     Log.e("Helpshift", "invalid install credentials : ", e);
+        // }
 
         if (config.hasKey("user")) {
             this.login(config.getMap("user"));

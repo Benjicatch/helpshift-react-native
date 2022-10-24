@@ -14,14 +14,7 @@ import java.io.File;
 import java.util.Map;
 import java.util.HashMap;
 
-import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.helpshift.Core;
-import com.helpshift.delegate.AuthenticationFailureReason;
-import com.helpshift.exceptions.InstallException;
-import com.helpshift.support.Support;
-import com.helpshift.HelpshiftUser;
-import com.helpshift.support.ApiConfig;
+import com.helpshift.Helpshift;
 
 import android.app.Activity;
 import android.app.Application;
@@ -54,9 +47,10 @@ public class RNHelpshiftModule extends ReactContextBaseJavaModule implements Sup
 
     @ReactMethod
     public void init(String key, String domain, String appid) throws InstallException {
-        Support.setDelegate(this);
-        Core.init(Support.getInstance());
-        Core.install(this.app, key, domain, appid);
+        Helpshift.install(this.app, appid, domain, config);
+        // Support.setDelegate(this);
+        // Core.init(Support.getInstance());
+        // Core.install(this.app, key, domain, appid);
     }
 
     @ReactMethod
@@ -91,8 +85,9 @@ public class RNHelpshiftModule extends ReactContextBaseJavaModule implements Sup
 
     @ReactMethod
     public void showConversation(){
+        Map<String, Object> config = new HashMap<>();
         final Activity activity = getCurrentActivity();
-        Support.showConversation(activity);
+        Helpshift.showConversation(activity, config);
     }
 
     @ReactMethod
@@ -104,8 +99,9 @@ public class RNHelpshiftModule extends ReactContextBaseJavaModule implements Sup
 
     @ReactMethod
     public void showFAQs(){
+        Map<String, Object> config = new HashMap<>();
         final Activity activity = getCurrentActivity();
-        Support.showFAQs(activity);
+        Support.showFAQs(activity, config);
     }
 
     @ReactMethod
